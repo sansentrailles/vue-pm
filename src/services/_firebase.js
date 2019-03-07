@@ -6,7 +6,7 @@ let config = {
   databaseURL: "",
   projectId: "",
   storageBucket: "",
-  messagingSenderId: ""
+  messagingSenderId: "`"
 };
 
 fb.initializeApp(config);
