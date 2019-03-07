@@ -8,7 +8,10 @@ export default {
     }
   },
   actions: {
-
+    loadProjects({commit}) {
+      const projects = []
+      commit('setProjects', projects)
+    }
   },
   getters: {
 
