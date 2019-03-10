@@ -1,6 +1,6 @@
 import fb from 'firebase'
 
-let config = {
+const config = {
   apiKey: "AIzaSyBNMnCw4Jhp_y9w31nm1KYgUl6SjBXTgbU",
   authDomain: "project-manager-e2a01.firebaseapp.com",
   databaseURL: "https://project-manager-e2a01.firebaseio.com",
@@ -10,3 +10,5 @@ let config = {
 };
 
 fb.initializeApp(config);
+
+export default fb
