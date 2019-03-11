@@ -79,11 +79,10 @@ export default {
     },
     tasks(state) {
       return state.tasks
-    }
-    // ,
+    },
     // projectTasks: (state) => (projectId) => state.tasks.filter(task => task.projectId == projectId),
-    // currentTasks(state) {
-    //   return (projectId) => state.tasks.filter(task => task.projectId == projectId)
-    // }
+    currentTasks(state) {
+      return (projectId) => state.tasks.filter(task => task.projectId == projectId)
+    }
   }
 }

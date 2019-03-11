@@ -5,7 +5,7 @@
         <v-card dark flat fluid>
           <v-layout row>
             <v-flex md10>
-              <v-card-text class="display-1 pa-2">Проект: %PROJECT_NAME%</v-card-text>
+              <v-card-text class="display-1 pa-2">Проект: <span v-if="currentProject">{{ currentProject.name }}</span></v-card-text>
             </v-flex>
 
             <v-flex md2>
@@ -39,7 +39,7 @@
 
       <v-flex xs12>
         <v-card dark color="primary" class="text-xs-center">
-          <new-task-dialog :id="id"/>
+          <new-task-dialog :id="projectId"/>
         </v-card>
       </v-flex>
 
@@ -86,9 +86,11 @@
 import NewTaskDialog from '@/components/task/NewTaskDialog'
 import {mapActions, mapGetters} from 'vuex'
 export default {
-  props: ['id'],
+  // props: ['id'],
   components: {NewTaskDialog},
   data: () => ({
+    projectId: null,
+    tasks: [],
     headers: [
       {
         text: 'Задача',
@@ -99,30 +101,41 @@ export default {
       { text: '', align: 'center', width: '10', sortable: false }
     ],
   }),
-  created() {
-    this.loadTasks(this.id)
-    // console.log(this.currentTasks)
-    // this.$store.dispatch('loadTasks', this.id)
+  created () {
+    this.projectId = this.$route.params.id
+    this.$store.dispatch('loadTasks', this.projectId)
+    this.tasks = this.$store.getters.currentTasks(this.projectId)
+    // this.currentProject = this.$store.getters.currentProject(projectId)
+  },
+  watch: {
+    // при изменениях маршрута запрашиваем данные снова
+    '$route': 'fetchData'
   },
   methods: {
-    ...mapActions(['loadTasks']),
-    sendMessage() {
-      alert('hello')
+    fetchData() {
+      this.projectId = this.$route.params.id
+      this.tasks = this.$store.getters.currentTasks(this.projectId)
+      console.log('fetchData', this.$route.params.id)
+      console.log(this.currentProject, this.currentProject.name)
     }
+    // ...mapActions(['loadTasks']),
+    // sendMessage() {
+    //   alert('hello')
+    // }
   },
   computed: {
-    ...mapGetters(['tasks']),
+    // ...mapGetters(['tasks']),
     // currentTasks () {
     //   console.log(this.$store.getters.currentTasks(this.id))
     //   return this.$store.getters.currentTasks(this.id)
     // },
     currentProject () {
-      const id = this.id
-      return this.$store.getters.currentProject(id)
+      // const id = this.id
+      return this.$store.getters.currentProject(this.projectId)
     }
     // tasks () {
     //   const id = this.id
-    //   return this.$store.getters.tasks(id)
+    //   return this.$store.getters.tasks(this.projectId)
     // }
   }
 }
