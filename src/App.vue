@@ -31,7 +31,7 @@
             <v-icon>settings</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
-            <v-list-tile-title>Settings</v-list-tile-title>
+            <v-list-tile-title>Settings</v-list-tile-title>`
           </v-list-tile-content>
         </v-list-tile>
       </v-list>
@@ -46,8 +46,16 @@
     <v-content dark pa-10>
         <router-view/>
     </v-content>
-    <v-footer app fixed>
+    <v-footer app fixed class="pa-3">
       <span>&copy; 2019</span>
+      <v-spacer></v-spacer>
+      <v-progress-circular
+        class="mx-1"
+        :size="16"
+        color="primary"
+        indeterminate
+      ></v-progress-circular>
+      <div class="mx-10">Сохранение... </div>
     </v-footer>
   </v-app>
 </template>

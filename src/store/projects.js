@@ -48,6 +48,7 @@ export default {
   getters: {
     projects(state) {
       return state.projects
-    }
+    },
+    currentProject: (state) => (projectId) => state.projects.find(project => project.id === projectId)
   }
 }

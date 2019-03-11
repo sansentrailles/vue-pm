@@ -23,7 +23,8 @@ export default new Router({
   {
     path: '/project/:id',
     name: 'project',
-    component: Project
+    component: Project,
+    props: true
   },
   {
       path: '/about',
