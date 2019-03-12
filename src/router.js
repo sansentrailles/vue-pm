@@ -4,6 +4,7 @@ import Home from './views/Home.vue'
 import Projects from './views/Projects'
 import Project from './views/Project'
 import TaskEditor from './components/task/TaskEditor'
+import Login from './components/auth/Login'
 
 Vue.use(Router)
 
@@ -33,6 +34,11 @@ export default new Router({
         component: TaskEditor
       }
     ]
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   },
   {
       path: '/about',
