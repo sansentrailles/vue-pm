@@ -1,28 +1,14 @@
-import status from './statuses'
 import fb from '@/services/firebase'
+import TaskModel from '@/models/TaskModel'
+import {statuses, statusConst} from './statuses'
+
 const db = fb.firestore()
 
 export default {
+  namespaced: true,
   state: {
     tasks: [],
-    statuses: [
-      {
-        id: status.STATUS_NEW,
-        title: 'Новая'
-      },
-      {
-        id: status.STATUS_IN_PROGRESS,
-        title: 'В работе'
-      },
-      {
-        id: status.STATUS_FINISHED,
-        title: 'Завершена'
-      },
-      {
-        id: status.STATUS_CANCELLED,
-        title: 'Отменена'
-      }
-    ]
+    statuses
   },
   mutations: {
     setTasks(state, payload) {
@@ -33,9 +19,11 @@ export default {
     }
   },
   actions: {
-    async loadTasks({commit}, payload) {
+    async loadTasks({commit}) {
       try {
-        const snapshot = await db.collection('tasks').where('projectId', '==', payload ).get()
+        const snapshot = await db.collection('tasks')
+          // .where('projectId', '==', payload )
+          .get()
         let list = [];
         snapshot.forEach(item => {
           const data = item.data()
@@ -49,6 +37,34 @@ export default {
           }
 
           list.push(task)
+        })
+
+        commit('setTasks', list)
+      } catch (error) {
+        commit('setError', error.message)
+      }
+    },
+    async loadModelTasks({
+      commit
+    }) {
+      try {
+        const snapshot = await db.collection('tasks')
+          .get()
+        let list = [];
+        snapshot.forEach(item => {
+          const data = item.data()
+          let task = {
+            id: item.id,
+            title: data.title,
+            text: data.text,
+            status: data.status,
+            date: data.date,
+            projectId: data.projectId
+          }
+
+          const taskModel = new TaskModel(task)
+
+          list.push(taskModel)
         })
 
         commit('setTasks', list)
@@ -74,15 +90,17 @@ export default {
     statuses(state) {
       return state.statuses
     },
-    defaultStatus(state) {
-      return state.statuses.find(status => status.id == status.DEFAULT_STATUS)
+    defaultStatus() {
+      return this.statuses.find(status => status.id == statusConst.DEFAULT_STATUS)
     },
     tasks(state) {
       return state.tasks
     },
-    // projectTasks: (state) => (projectId) => state.tasks.filter(task => task.projectId == projectId),
     currentTasks(state) {
       return (projectId) => state.tasks.filter(task => task.projectId == projectId)
+    },
+    taskById(state) {
+      return (taskId) => state.tasks.find(task => task.id == taskId)
     }
   }
 }

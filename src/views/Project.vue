@@ -47,17 +47,20 @@
         <v-card dark color="secondary">
           <v-card-text class="pa-2">
             <v-data-table
+              :loading="loading"
+              :hide-actions="true"
               :headers="headers"
               :items="tasks"
               class="elevation-1"
             >
               <template v-slot:items="props">
+                <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td>
                 <td>{{ props.item.title }}</td>
-                <td class="text-xs-right">{{ props.item.date }}</td>
+                <td class="text-xs-right">{{ props.item.formattedDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
-                      <v-btn flat icon color="grey" v-on="on" :to="'/task/'+props.item.id">
+                      <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
                         <v-icon>visibility</v-icon>
                       </v-btn>
                     </template>
@@ -84,14 +87,23 @@
 
 <script>
 import NewTaskDialog from '@/components/task/NewTaskDialog'
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions} from 'vuex'
+
 export default {
   // props: ['id'],
   components: {NewTaskDialog},
   data: () => ({
     projectId: null,
+    loading: false,
     tasks: [],
     headers: [
+      {
+        text: 'Статус',
+        align: 'left',
+        value: 'status',
+        width: 5,
+        sortabel: false
+      },
       {
         text: 'Задача',
         align: 'left',
@@ -102,41 +114,27 @@ export default {
     ],
   }),
   created () {
-    this.projectId = this.$route.params.id
-    this.$store.dispatch('loadTasks', this.projectId)
-    this.tasks = this.$store.getters.currentTasks(this.projectId)
-    // this.currentProject = this.$store.getters.currentProject(projectId)
+    // this.loadTasks()
+    this.loadModelTasks()
+    this.fetchData()
   },
   watch: {
-    // при изменениях маршрута запрашиваем данные снова
     '$route': 'fetchData'
   },
   methods: {
+    ...mapActions({
+      // loadTasks: 'task/loadTasks',
+      loadModelTasks: 'task/loadModelTasks'
+    }),
     fetchData() {
       this.projectId = this.$route.params.id
-      this.tasks = this.$store.getters.currentTasks(this.projectId)
-      console.log('fetchData', this.$route.params.id)
-      console.log(this.currentProject, this.currentProject.name)
+      this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
     }
-    // ...mapActions(['loadTasks']),
-    // sendMessage() {
-    //   alert('hello')
-    // }
   },
   computed: {
-    // ...mapGetters(['tasks']),
-    // currentTasks () {
-    //   console.log(this.$store.getters.currentTasks(this.id))
-    //   return this.$store.getters.currentTasks(this.id)
-    // },
     currentProject () {
-      // const id = this.id
       return this.$store.getters.currentProject(this.projectId)
     }
-    // tasks () {
-    //   const id = this.id
-    //   return this.$store.getters.tasks(this.projectId)
-    // }
   }
 }
 </script>

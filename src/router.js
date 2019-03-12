@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Projects from './views/Projects'
 import Project from './views/Project'
+import TaskEditor from './components/task/TaskEditor'
 
 Vue.use(Router)
 
@@ -24,7 +25,14 @@ export default new Router({
     path: '/project/:id',
     name: 'project',
     component: Project,
-    props: true
+    // props: true
+    children: [
+      {
+        name: 'taskEdit',
+        path: 'task/:taskId',
+        component: TaskEditor
+      }
+    ]
   },
   {
       path: '/about',

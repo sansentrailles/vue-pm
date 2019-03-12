@@ -81,7 +81,7 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import status from '@/store/statuses'
+import {statusConst} from '@/store/statuses'
 
 export default {
   props: ['id'],
@@ -92,10 +92,13 @@ export default {
     dialog: false,
     title: '',
     text: '',
-    status: status.DEFAULT_STATUS
+    status: statusConst.DEFAULT_STATUS
   }),
   computed: {
-    ...mapGetters(['statuses', 'defaultStatus']),
+    ...mapGetters({
+      statuses: 'task/statuses',
+      defaultStatus: 'task/defaultStatus'
+    }),
     computedDateFormatted() {
       return this.formatDate(this.date)
     }
@@ -108,7 +111,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(['addTask']),
+    ...mapActions(['task/addTask']),
     closeForm() {
       this.dialog = false
       this.reset()
