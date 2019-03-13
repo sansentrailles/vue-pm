@@ -26,7 +26,6 @@ Vue.config.productionTip = false
 
 let app = ''
 fb.auth().onAuthStateChanged(() => {
-  // console.log(user)
   if (!app) {
     app = new Vue({
       router,

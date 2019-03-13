@@ -113,9 +113,9 @@ export default {
       { text: '', align: 'center', width: '10', sortable: false }
     ],
   }),
-  created () {
+  async created () {
     // this.loadTasks()
-    this.loadModelTasks()
+    await this.loadModelTasks()
     this.fetchData()
   },
   watch: {
