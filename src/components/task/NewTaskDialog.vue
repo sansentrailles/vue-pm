@@ -73,7 +73,11 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" flat @click="closeForm">Закрыть</v-btn>
-        <v-btn color="blue darken-1" flat @click="submit">Добавить задачу</v-btn>
+        <v-btn
+          color="blue darken-1"
+          flat
+          :loading="taskProcessing"
+          @click="submit">Добавить задачу</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -97,7 +101,8 @@ export default {
   computed: {
     ...mapGetters({
       statuses: 'task/statuses',
-      defaultStatus: 'task/defaultStatus'
+      defaultStatus: 'task/defaultStatus',
+      taskProcessing: 'task/isProcessing'
     }),
     computedDateFormatted() {
       return this.formatDate(this.date)
@@ -111,7 +116,9 @@ export default {
   },
 
   methods: {
-    ...mapActions(['task/addTask']),
+    ...mapActions({
+      addTask: 'task/addTask'
+    }),
     closeForm() {
       this.dialog = false
       this.reset()
@@ -126,8 +133,8 @@ export default {
       }
 
       this.addTask(task)
-      this.reset()
       this.dialog = false
+      this.reset()
     },
     reset () {
       this.$refs.form.reset()

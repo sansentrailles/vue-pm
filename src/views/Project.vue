@@ -47,7 +47,7 @@
         <v-card dark color="secondary">
           <v-card-text class="pa-2">
             <v-data-table
-              :loading="loading"
+              :loading="taskProcessing"
               :hide-actions="true"
               :headers="headers"
               :items="tasks"
@@ -87,7 +87,7 @@
 
 <script>
 import NewTaskDialog from '@/components/task/NewTaskDialog'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 
 export default {
   // props: ['id'],
@@ -132,6 +132,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      taskProcessing: 'task/isProcessing'
+    }),
     currentProject () {
       return this.$store.getters.currentProject(this.projectId)
     }

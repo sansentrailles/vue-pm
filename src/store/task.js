@@ -8,7 +8,8 @@ export default {
   namespaced: true,
   state: {
     tasks: [],
-    statuses
+    statuses,
+    processing: false,
   },
   mutations: {
     setTasks(state, payload) {
@@ -16,6 +17,9 @@ export default {
     },
     addTask(state, payload) {
       state.tasks.push(payload)
+    },
+    setProcessing(state, payload) {
+      state.processing = payload
     }
   },
   actions: {
@@ -44,9 +48,9 @@ export default {
         commit('setError', error.message)
       }
     },
-    async loadModelTasks({
-      commit
-    }) {
+    async loadModelTasks({commit}) {
+      // commit('clearError')
+      commit('setProcessing', true)
       try {
         const snapshot = await db.collection('tasks')
           .get()
@@ -68,14 +72,15 @@ export default {
         })
 
         commit('setTasks', list)
+        commit('setProcessing', false)
       } catch (error) {
         commit('setError', error.message)
       }
     },
     async addTask({commit}, payload) {
+      commit('setProcessing', true)
+      commit('clearErrors')
       try {
-        commit('setProcessing', true)
-        commit('clearErrors')
         const ref = await db.collection('tasks').add(payload);
         payload.id = ref.id;
         commit('addTask', payload)
@@ -101,6 +106,9 @@ export default {
     },
     taskById(state) {
       return (taskId) => state.tasks.find(task => task.id == taskId)
+    },
+    isProcessing(state) {
+      return state.processing
     }
   }
 }
