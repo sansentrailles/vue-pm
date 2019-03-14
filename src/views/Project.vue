@@ -56,7 +56,7 @@
               <template v-slot:items="props">
                 <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td>
                 <td>{{ props.item.title }}</td>
-                <td class="text-xs-right">{{ props.item.formattedDate }}</td>
+                <!-- <td class="text-xs-right">{{ props.item.formattedDate }}</td> -->
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
@@ -109,7 +109,7 @@ export default {
         align: 'left',
         value: 'title'
       },
-      { text: 'Дата', value: 'date', align: 'right' },
+      // { text: 'Дата', value: 'date', align: 'right' },
       { text: '', align: 'center', width: '10', sortable: false }
     ],
   }),

@@ -33,6 +33,7 @@ export default {
         let list = [];
         snapshot.forEach(item => {
           const data = item.data()
+
           let task = {
             id: item.id,
             title: data.title,
@@ -50,15 +51,32 @@ export default {
         commit('setError', error.message)
       }
     },
+    async loadModelTaskByProjectID({commit}, payload) {
+      commit('setProcessing', true)
+
+      try {
+        const snapshot = await db.collection('tasks')
+          .where('projectId', '==', payload)
+          .get()
+      } catch(error) {
+        commit('setError', error.message, {root: true})
+      }
+    },
     async loadModelTasks({commit}) {
-      // commit('clearError')
+      commit('clearErrors', null, {root: true})
       commit('setProcessing', true)
       try {
         const snapshot = await db.collection('tasks')
           .get()
         let list = [];
+
         snapshot.forEach(item => {
           const data = item.data()
+const dateField = item.get('date').toDate()
+console.log(dateField.getFullYear())
+// console.log('data', new Date(data.date.seconds * 1000))
+// const date = new firebase.firestore.Timestamp.toDate(data.date);
+// console.log('date', date)
           let task = {
             id: item.id,
             title: data.title,
@@ -76,7 +94,9 @@ export default {
         commit('setTasks', list)
         commit('setProcessing', false)
       } catch (error) {
-        commit('setError', error.message)
+        // commit('setError', error.message)
+        commit('setError', error.message, { root: true })
+        console.log('error', error.message)
       }
     },
     async addTask({commit}, payload) {
