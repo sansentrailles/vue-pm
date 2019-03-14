@@ -2,6 +2,8 @@ import fb from '@/services/firebase'
 import TaskModel from '@/models/TaskModel'
 import {statuses, statusConst} from './statuses'
 
+import firebase from 'firebase'
+
 const db = fb.firestore()
 
 export default {
@@ -78,8 +80,11 @@ export default {
       }
     },
     async addTask({commit}, payload) {
+      const timestamp = new firebase.firestore.Timestamp.fromDate(new Date(payload.date));
+      payload.date = timestamp
+
       commit('setProcessing', true)
-      commit('clearErrors')
+      // commit('clearErrors')
       try {
         const ref = await db.collection('tasks').add(payload);
         payload.id = ref.id;
