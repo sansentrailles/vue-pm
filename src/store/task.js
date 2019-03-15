@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import fb from '@/services/firebase'
 import TaskModel from '@/models/TaskModel'
 import {statuses, statusConst} from './statuses'
@@ -9,7 +10,8 @@ const db = fb.firestore()
 export default {
   namespaced: true,
   state: {
-    tasks: [],
+    // tasks: [],
+    tasks: {},
     statuses,
     processing: false,
   },
@@ -22,42 +24,71 @@ export default {
     },
     setProcessing(state, payload) {
       state.processing = payload
+    },
+    setTasksForProject(state, {projectId, tasks}) {
+      console.log('tasks', tasks)
+      Vue.set(state.tasks, projectId, tasks)
+      // state.tasks
     }
   },
   actions: {
-    async loadTasks({commit}) {
-      try {
-        const snapshot = await db.collection('tasks')
-          // .where('projectId', '==', payload )
-          .get()
-        let list = [];
-        snapshot.forEach(item => {
-          const data = item.data()
+    // async loadTasks({commit}) {
+    //   try {
+    //     const snapshot = await db.collection('tasks')
+    //       // .where('projectId', '==', payload )
+    //       .get()
+    //     let list = [];
+    //     snapshot.forEach(item => {
+    //       const data = item.data()
 
-          let task = {
-            id: item.id,
-            title: data.title,
-            text: data.text,
-            status: data.status,
-            date: data.date,
-            projectId: data.projectId
-          }
+    //       let task = {
+    //         id: item.id,
+    //         title: data.title,
+    //         text: data.text,
+    //         status: data.status,
+    //         date: data.date,
+    //         projectId: data.projectId
+    //       }
 
-          list.push(task)
-        })
+    //       list.push(task)
+    //     })
 
-        commit('setTasks', list)
-      } catch (error) {
-        commit('setError', error.message)
-      }
-    },
-    async loadModelTaskByProjectID({commit}, payload) {
+    //     commit('setTasks', list)
+    //   } catch (error) {
+    //     commit('setError', error.message)
+    //   }
+    // },
+    async loadModelTasksByProject({commit}, projectId) {
       commit('setProcessing', true)
 
       try {
         const snapshot = await db.collection('tasks')
-          .where('projectId', '==', payload)
+          .where('projectId', '==', projectId)
           .get()
+
+          let list = [];
+          snapshot.forEach(item => {
+            const data = item.data()
+            const dateField = item.get('date').toDate()
+
+            let task = {
+              id: item.id,
+              title: data.title,
+              text: data.text,
+              status: data.status,
+              date: dateField,
+              projectId: data.projectId
+            }
+
+            const taskModel = new TaskModel(task)
+            list.push(taskModel)
+          })
+
+          commit('setTasksForProject', {
+            projectId,
+            tasks: list
+          })
+          commit('setProcessing', false)
       } catch(error) {
         commit('setError', error.message, {root: true})
       }
@@ -67,13 +98,14 @@ export default {
       commit('setProcessing', true)
       try {
         const snapshot = await db.collection('tasks')
+          .orderBy('date', 'desc')
           .get()
         let list = [];
 
         snapshot.forEach(item => {
           const data = item.data()
-const dateField = item.get('date').toDate()
-console.log(dateField.getFullYear())
+          const dateField = item.get('date').toDate()
+// console.log(dateField.getFullYear())
 // console.log('data', new Date(data.date.seconds * 1000))
 // const date = new firebase.firestore.Timestamp.toDate(data.date);
 // console.log('date', date)
@@ -82,7 +114,7 @@ console.log(dateField.getFullYear())
             title: data.title,
             text: data.text,
             status: data.status,
-            date: data.date,
+            date: dateField,
             projectId: data.projectId
           }
 
@@ -96,7 +128,7 @@ console.log(dateField.getFullYear())
       } catch (error) {
         // commit('setError', error.message)
         commit('setError', error.message, { root: true })
-        console.log('error', error.message)
+        // console.log('error', error.message)
       }
     },
     async addTask({commit}, payload) {
@@ -120,14 +152,15 @@ console.log(dateField.getFullYear())
     statuses(state) {
       return state.statuses
     },
-    defaultStatus() {
-      return this.statuses.find(status => status.id == statusConst.DEFAULT_STATUS)
+    defaultStatus(state) {
+      return state.statuses.find(status => status.id == statusConst.DEFAULT_STATUS)
     },
     tasks(state) {
       return state.tasks
     },
     currentTasks(state) {
-      return (projectId) => state.tasks.filter(task => task.projectId == projectId)
+      // return (projectId) => state.tasks.filter(task => task.projectId == projectId)
+      return (projectId) => state.tasks[projectId]
     },
     taskById(state) {
       return (taskId) => state.tasks.find(task => task.id == taskId)

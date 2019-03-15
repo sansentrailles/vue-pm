@@ -1,4 +1,4 @@
-import DateTimeHelper from '@/helpers/DateTimeHelper'
+// import DateTimeHelper from '@/helpers/DateTimeHelper'
 import {statuses} from '@/store/statuses'
 
 export default class {
@@ -13,7 +13,15 @@ export default class {
   }
 
   get formattedDate() {
-    return DateTimeHelper.formatted(this.date)
+    const date = new Date(this.date)
+
+    const options = {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+    };
+
+    return date.toLocaleDateString('ru-ru', options)
   }
 
   get statusObj() {

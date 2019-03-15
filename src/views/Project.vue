@@ -21,7 +21,6 @@
                   <span>Редактировать проект</span>
                 </v-tooltip>
 
-
                 <v-tooltip bottom>
                   <template v-slot:activator="{ on }">
                     <v-btn flat icon color="grey" v-on="on">
@@ -56,7 +55,7 @@
               <template v-slot:items="props">
                 <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td>
                 <td>{{ props.item.title }}</td>
-                <!-- <td class="text-xs-right">{{ props.item.formattedDate }}</td> -->
+                <td class="text-xs-right">{{ props.item.formattedDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
@@ -90,7 +89,6 @@ import NewTaskDialog from '@/components/task/NewTaskDialog'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-  // props: ['id'],
   components: {NewTaskDialog},
   data: () => ({
     projectId: null,
@@ -109,13 +107,13 @@ export default {
         align: 'left',
         value: 'title'
       },
-      // { text: 'Дата', value: 'date', align: 'right' },
+      { text: 'Дата', value: 'date', align: 'right' },
       { text: '', align: 'center', width: '10', sortable: false }
     ],
   }),
-  async created () {
-    // this.loadTasks()
-    await this.loadModelTasks()
+  created () {
+    // await this.loadModelTasks()
+    // await this.loadModelTasksByProject(this.$route.params.id)
     this.fetchData()
   },
   watch: {
@@ -123,12 +121,16 @@ export default {
   },
   methods: {
     ...mapActions({
-      // loadTasks: 'task/loadTasks',
-      loadModelTasks: 'task/loadModelTasks'
+      loadModelTasks: 'task/loadModelTasks',
+      loadModelTasksByProject: 'task/loadModelTasksByProject'
     }),
-    fetchData() {
+    async fetchData() {
       this.projectId = this.$route.params.id
+      await this.loadModelTasksByProject(this.projectId)
+
       this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
+      console.log(this.tasks[0].statusObj)
+      // this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
     }
   },
   computed: {
