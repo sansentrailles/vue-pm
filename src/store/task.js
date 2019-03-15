@@ -26,7 +26,6 @@ export default {
       state.processing = payload
     },
     setTasksForProject(state, {projectId, tasks}) {
-      console.log('tasks', tasks)
       Vue.set(state.tasks, projectId, tasks)
       // state.tasks
     }
@@ -163,7 +162,7 @@ export default {
       return (projectId) => state.tasks[projectId]
     },
     taskById(state) {
-      return (taskId) => state.tasks.find(task => task.id == taskId)
+      return (projectId, taskId) => state.tasks[projectId].find(task => task.id == taskId)
     },
     isProcessing(state) {
       return state.processing

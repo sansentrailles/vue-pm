@@ -61,6 +61,7 @@ export default {
     title: '',
     text: '',
     status: '',
+    projectId: null,
     disabled: true,
     mode: 1
   }),
@@ -76,12 +77,14 @@ export default {
 
       this.taskId = this.$route.params.taskId
       this.title = this.currentTask.title
+      this.title = this.currentTask.title
       this.text = this.currentTask.text
+      this.projectId = this.currentTask.projectId
     }
   },
   computed: {
     currentTask () {
-      return this.$store.getters['task/taskById'](this.taskId)
+      return this.$store.getters['task/taskById'](this.propjecId, this.taskId)
     }
   }
 }
