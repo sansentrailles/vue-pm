@@ -66,6 +66,7 @@ export default {
     mode: 1
   }),
   created() {
+    this.projectId = this.$route.params.id
     this.fetchData()
   },
   watch: {
@@ -79,12 +80,11 @@ export default {
       this.title = this.currentTask.title
       this.title = this.currentTask.title
       this.text = this.currentTask.text
-      this.projectId = this.currentTask.projectId
     }
   },
   computed: {
     currentTask () {
-      return this.$store.getters['task/taskById'](this.propjecId, this.taskId)
+      return this.$store.getters['task/taskById'](this.projecId, this.taskId)
     }
   }
 }
