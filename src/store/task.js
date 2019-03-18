@@ -27,7 +27,10 @@ export default {
     },
     setTasksForProject(state, {projectId, tasks}) {
       Vue.set(state.tasks, projectId, tasks)
-      // state.tasks
+    },
+    updateTask(state, {projectId, task}) {
+      const index = state.tasks[projectId].findIndex(item => item.id == task.id)
+      state.tasks[projectId].splice(index, 1, task)
     }
   },
   actions: {
@@ -135,7 +138,7 @@ export default {
       payload.date = timestamp
 
       commit('setProcessing', true)
-      // commit('clearErrors')
+      commit('clearErrors', {root: true})
       try {
         const ref = await db.collection('tasks').add(payload);
         payload.id = ref.id;
@@ -158,11 +161,12 @@ export default {
       return state.tasks
     },
     currentTasks(state) {
-      // return (projectId) => state.tasks.filter(task => task.projectId == projectId)
       return (projectId) => state.tasks[projectId]
     },
     taskById(state) {
-      return (projectId, taskId) => state.tasks[projectId].find(task => task.id == taskId)
+      return (projectId, taskId) => {
+        return state.tasks[projectId].find(task => task.id == taskId)
+      }
     },
     isProcessing(state) {
       return state.processing

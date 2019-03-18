@@ -66,7 +66,7 @@ export default {
     mode: 1
   }),
   created() {
-    this.projectId = this.$route.params.id
+    // this.projectId = this.$route.params.id
     this.fetchData()
   },
   watch: {
@@ -74,6 +74,7 @@ export default {
   },
   methods: {
     fetchData() {
+      this.projectId = this.$route.params.id
       this.taskId = this.$route.params.taskId
 
       this.taskId = this.$route.params.taskId
@@ -84,7 +85,7 @@ export default {
   },
   computed: {
     currentTask () {
-      return this.$store.getters['task/taskById'](this.projecId, this.taskId)
+      return this.$store.getters['task/taskById'](this.projectId, this.taskId)
     }
   }
 }
