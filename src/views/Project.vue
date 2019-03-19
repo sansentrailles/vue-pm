@@ -48,6 +48,7 @@
             <v-data-table
               :loading="taskProcessing"
               :hide-actions="true"
+              no-data-text="Пока задач нет"
               :headers="headers"
               :items="tasks"
               class="elevation-1"
