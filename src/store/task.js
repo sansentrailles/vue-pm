@@ -86,10 +86,7 @@ export default {
             list.push(taskModel)
           })
 
-          commit('setTasksForProject', {
-            projectId,
-            tasks: list
-          })
+          commit('setTasksForProject', {projectId, tasks: list})
           commit('setProcessing', false)
       } catch(error) {
         commit('setError', error.message, {root: true})
@@ -128,9 +125,7 @@ export default {
         commit('setTasks', list)
         commit('setProcessing', false)
       } catch (error) {
-        // commit('setError', error.message)
         commit('setError', error.message, { root: true })
-        // console.log('error', error.message)
       }
     },
     async addTask({commit}, payload) {
@@ -138,7 +133,7 @@ export default {
       payload.date = timestamp
 
       commit('setProcessing', true)
-      commit('clearErrors', {root: true})
+      commit('clearErrors', null, {root: true})
       try {
         const ref = await db.collection('tasks').add(payload);
         payload.id = ref.id;
@@ -146,7 +141,27 @@ export default {
         commit('setProcessing', false)
       } catch (error) {
         commit('setProcessing', false)
-        commit('setError', error.message)
+        commit('setError', error.message, {root: true})
+      }
+    },
+    async updateTask({commit}, payload) {
+      // const taskModel = new TaskModel()
+      try {
+        let taskRef = await db.collection('tasks').doc(payload.task.id)
+        let taskDoc = await taskRef.get()
+        if(taskDoc.exists) {
+          taskRef.update(payload.task)
+          // add commit
+          commit('updateTask', payload)
+        } else {
+          // eslint-disable-next-line no-console
+          console.log('no exists')
+        }
+
+        commit('clearErrors', null, {root: true})
+
+      } catch (error) {
+        commit('setError', error.message, {root: true})
       }
     }
   },

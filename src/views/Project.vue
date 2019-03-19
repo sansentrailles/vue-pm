@@ -129,7 +129,6 @@ export default {
       await this.loadModelTasksByProject(this.projectId)
 
       this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
-      console.log(this.tasks[0].statusObj)
       // this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
     }
   },

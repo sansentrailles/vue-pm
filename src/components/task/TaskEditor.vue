@@ -41,7 +41,7 @@
             <v-flex xs12>
               <v-card-actions class="pa-0">
                 <v-spacer></v-spacer>
-                <v-btn v-if="!disabled" @click="disabled = false">
+                <v-btn v-if="!disabled" @click="submit">
                   Сохранить
                 </v-btn>
               </v-card-actions>
@@ -54,6 +54,7 @@
 
 <script>
 // import status from '@/store/statuses'
+import {mapActions} from 'vuex'
 export default {
   data: () => ({
     taskId: null,
@@ -62,25 +63,41 @@ export default {
     text: '',
     status: '',
     projectId: null,
-    disabled: true,
-    mode: 1
+    disabled: false,
+    mode: 0
   }),
-  created() {
-    // this.projectId = this.$route.params.id
+  async created() {
+    this.projectId = this.$route.params.id
+    await this.loadModelTasksByProject(this.projectId)
     this.fetchData()
   },
   watch: {
     '$route': 'fetchData'
   },
   methods: {
+    ...mapActions({
+      updateTask: 'task/updateTask',
+      loadModelTasksByProject: 'task/loadModelTasksByProject'
+    }),
     fetchData() {
       this.projectId = this.$route.params.id
       this.taskId = this.$route.params.taskId
 
       this.taskId = this.$route.params.taskId
       this.title = this.currentTask.title
-      this.title = this.currentTask.title
       this.text = this.currentTask.text
+    },
+    submit() {
+      let task = {
+        id: this.taskId,
+        title: this.title,
+        text: this.text
+      }
+
+      this.updateTask({projectId: this.projectId, task})
+      this.loadModelTasksByProject(this.projectId)
+
+      // disabled = false
     }
   },
   computed: {
