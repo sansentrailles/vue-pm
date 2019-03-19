@@ -87,15 +87,16 @@ export default {
       this.title = this.currentTask.title
       this.text = this.currentTask.text
     },
-    submit() {
+    async submit() {
       let task = {
         id: this.taskId,
         title: this.title,
         text: this.text
       }
 
-      this.updateTask({projectId: this.projectId, task})
-      this.loadModelTasksByProject(this.projectId)
+      await this.updateTask({projectId: this.projectId, task})
+      this.$router.push({ name: 'project', params: { id: this.projectId } })
+    //   this.loadModelTasksByProject(this.projectId)
 
       // disabled = false
     }
