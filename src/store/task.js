@@ -31,6 +31,9 @@ export default {
     updateTask(state, {projectId, task}) {
       const index = state.tasks[projectId].findIndex(item => item.id == task.id)
       state.tasks[projectId].splice(index, 1, task)
+      // create TaskModel
+      // Object.assign(this.tasks[projectId], taskModel)
+      // Object.assign(this.desserts[this.editedIndex], this.editedItem)
     }
   },
   actions: {
