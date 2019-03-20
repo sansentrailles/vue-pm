@@ -95,7 +95,7 @@ export default {
       }
 
       await this.updateTask({projectId: this.projectId, task})
-      this.$router.push({ name: 'project', params: { id: this.projectId } })
+      // this.$router.push({ name: 'project', params: { id: this.projectId } })
     //   this.loadModelTasksByProject(this.projectId)
 
       // disabled = false

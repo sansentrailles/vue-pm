@@ -28,10 +28,10 @@ export default {
     setTasksForProject(state, {projectId, tasks}) {
       Vue.set(state.tasks, projectId, tasks)
     },
-    updateTask(state, {projectId, task}) {
-      const index = state.tasks[projectId].findIndex(item => item.id == task.id)
-      state.tasks[projectId].splice(index, 1, task)
+    updateTask(state, {projectId, taskModel}) {
+      const index = state.tasks[projectId].findIndex(item => item.id == taskModel.id)
       // create TaskModel
+      state.tasks[projectId].splice(index, 1, taskModel)
       // Object.assign(this.tasks[projectId][index], taskModel)
       // Object.assign(this.desserts[this.editedIndex], this.editedItem)
     }
@@ -147,15 +147,24 @@ export default {
         commit('setError', error.message, {root: true})
       }
     },
-    async updateTask({commit}, payload) {
+    async updateTask({commit}, {projectId, task}) {
       // const taskModel = new TaskModel()
       try {
-        let taskRef = await db.collection('tasks').doc(payload.task.id)
+        let taskRef = await db.collection('tasks').doc(task.id)
         let taskDoc = await taskRef.get()
         if(taskDoc.exists) {
-          taskRef.update(payload.task)
+          taskRef.update(task)
+          const data = taskDoc.data()
+          let taskModel = new TaskModel({
+            id: task.id,
+            title: task.title,
+            text: task.text,
+            date: data.date,
+            status: data.status,
+            projectId
+          })
           // add commit
-          commit('updateTask', payload)
+          commit('updateTask', {projectId, taskModel})
         } else {
           // eslint-disable-next-line no-console
           console.log('no exists')
