@@ -61,8 +61,8 @@ export default {
     text: '',
     status: '',
     projectId: null,
-    disabled: false,
-    mode: 0
+    disabled: true,
+    mode: 1
   }),
   async created() {
     this.projectId = this.$route.params.id
