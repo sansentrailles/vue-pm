@@ -53,12 +53,10 @@
 </template>
 
 <script>
-// import status from '@/store/statuses'
-import {mapActions} from 'vuex'
+import {mapActions, mapGetters} from 'vuex'
 export default {
   data: () => ({
     taskId: null,
-    tasks: [],
     title: '',
     text: '',
     status: '',
@@ -68,7 +66,9 @@ export default {
   }),
   async created() {
     this.projectId = this.$route.params.id
-    await this.loadModelTasksByProject(this.projectId)
+    if(this.tasks.length === 0) {
+      await this.loadModelTasksByProject(this.projectId)
+    }
     this.fetchData()
   },
   watch: {
@@ -80,12 +80,11 @@ export default {
       loadModelTasksByProject: 'task/loadModelTasksByProject'
     }),
     fetchData() {
-      this.projectId = this.$route.params.id
       this.taskId = this.$route.params.taskId
+      let task = this.tasks.find(item => item.id === this.taskId)
 
-      this.taskId = this.$route.params.taskId
-      this.title = this.currentTask.title
-      this.text = this.currentTask.text
+      this.title = task.title
+      this.text = task.text
     },
     async submit() {
       let task = {
@@ -94,17 +93,14 @@ export default {
         text: this.text
       }
 
-      await this.updateTask({projectId: this.projectId, task})
-      // this.$router.push({ name: 'project', params: { id: this.projectId } })
-    //   this.loadModelTasksByProject(this.projectId)
-
-      // disabled = false
+      await this.updateTask(task)
+      disabled = false
     }
   },
   computed: {
-    currentTask () {
-      return this.$store.getters['task/taskById'](this.projectId, this.taskId)
-    }
+    ...mapGetters({
+      tasks: 'task/tasks'
+    })
   }
 }
 </script>

@@ -94,7 +94,7 @@ export default {
   data: () => ({
     projectId: null,
     loading: false,
-    tasks: [],
+    // tasks: [],
     headers: [
       {
         text: 'Статус',
@@ -113,8 +113,6 @@ export default {
     ],
   }),
   created () {
-    // await this.loadModelTasks()
-    // await this.loadModelTasksByProject(this.$route.params.id)
     this.fetchData()
   },
   watch: {
@@ -122,20 +120,17 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadModelTasks: 'task/loadModelTasks',
       loadModelTasksByProject: 'task/loadModelTasksByProject'
     }),
     async fetchData() {
       this.projectId = this.$route.params.id
       await this.loadModelTasksByProject(this.projectId)
-
-      this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
-      // this.tasks = this.$store.getters['task/currentTasks'](this.projectId)
     }
   },
   computed: {
     ...mapGetters({
-      taskProcessing: 'task/isProcessing'
+      taskProcessing: 'task/isProcessing',
+      tasks: 'task/tasks'
     }),
     currentProject () {
       return this.$store.getters.currentProject(this.projectId)

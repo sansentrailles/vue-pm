@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Projects from './views/Projects'
 import Project from './views/Project'
+import Dev from './views/Dev'
 import TaskEditor from './components/task/TaskEditor'
 import Login from './components/auth/Login'
 
@@ -39,6 +40,11 @@ export default new Router({
     path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/dev',
+    name: 'dev',
+    component: Dev
   },
   {
       path: '/about',

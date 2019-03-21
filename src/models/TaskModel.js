@@ -25,7 +25,6 @@ export default class {
   }
 
   get statusObj() {
-    // return this.status
     return statuses.find(status => status.id == this.status)
   }
 }
