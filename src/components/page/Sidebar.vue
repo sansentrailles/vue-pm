@@ -27,7 +27,7 @@ export default {
     ProjectList
   },
   data: () => ({
-    drawer: null,
+    // drawer: null,
   }),
 }
 </script>
