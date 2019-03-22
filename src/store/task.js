@@ -139,7 +139,8 @@ export default {
       }
     },
     async addTask({commit}, payload) {
-      const timestamp = new firebase.firestore.Timestamp.fromDate(new Date(payload.date));
+      const origDate = payload.date
+      const timestamp = new firebase.firestore.Timestamp.fromDate(new Date(payload.date))
       payload.date = timestamp
 
       commit('setProcessing', true)
@@ -147,14 +148,9 @@ export default {
       try {
         const ref = await db.collection('tasks').add(payload);
 
-        let taskModel = new TaskModel({
-          id: ref.id,
-          title: payload.title,
-          text: payload.text,
-          date: timestamp,
-          status: payload.status,
-          projectId: payload.projectId
-        })
+        payload.id = ref.id
+        payload.date = origDate
+        let taskModel = new TaskModel(payload)
 
         commit('addTask', taskModel)
         commit('setProcessing', false)
