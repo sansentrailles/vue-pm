@@ -146,8 +146,17 @@ export default {
       commit('clearErrors', null, {root: true})
       try {
         const ref = await db.collection('tasks').add(payload);
-        payload.id = ref.id;
-        commit('addTask', payload)
+
+        let taskModel = new TaskModel({
+          id: ref.id,
+          title: payload.title,
+          text: payload.text,
+          date: timestamp,
+          status: payload.status,
+          projectId: payload.projectId
+        })
+
+        commit('addTask', taskModel)
         commit('setProcessing', false)
       } catch (error) {
         commit('setProcessing', false)

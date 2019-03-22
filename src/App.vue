@@ -15,7 +15,7 @@
         <router-view/>
     </v-content>
 
-    <footer />
+    <Footer />
 
   </v-app>
 </template>
