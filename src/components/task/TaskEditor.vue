@@ -94,7 +94,7 @@ export default {
       }
 
       await this.updateTask(task)
-      disabled = false
+      this.disabled = false
     }
   },
   computed: {

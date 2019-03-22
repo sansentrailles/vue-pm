@@ -15,15 +15,21 @@
         <router-view/>
     </v-content>
 
+    <footer />
+
   </v-app>
 </template>
 
 <script>
 import Footer from '@/components/page/Footer'
 import Sidebar from '@/components/page/Sidebar'
-import Header from '@/components/page/Header'
+// import Header from '@/components/page/Header'
 export default {
-  components: {Header, Footer, Sidebar},
+  components: {
+    // Header,
+    Footer,
+    Sidebar
+  },
   data: () => ({
     drawer: null,
     name: ''
