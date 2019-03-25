@@ -2,13 +2,13 @@
 import {statuses} from '@/store/statuses'
 
 export default class {
-  constructor({id, title, text, date, status, projectId}) {
-    // console.log(statuses)
+  constructor({id, title, text, date, status, projectId, isCompleted}) {
     this.id = id
     this.title = title
     this.text = text
     this.date = date
     this.status = status
+    this.isCompleted = isCompleted
     this.projectId = projectId
   }
 

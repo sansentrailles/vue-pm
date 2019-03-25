@@ -43,32 +43,6 @@ export default {
     }
   },
   actions: {
-    // async loadTasks({commit}) {
-    //   try {
-    //     const snapshot = await db.collection('tasks')
-    //       // .where('projectId', '==', payload )
-    //       .get()
-    //     let list = [];
-    //     snapshot.forEach(item => {
-    //       const data = item.data()
-
-    //       let task = {
-    //         id: item.id,
-    //         title: data.title,
-    //         text: data.text,
-    //         status: data.status,
-    //         date: data.date,
-    //         projectId: data.projectId
-    //       }
-
-    //       list.push(task)
-    //     })
-
-    //     commit('setTasks', list)
-    //   } catch (error) {
-    //     commit('setError', error.message)
-    //   }
-    // },
     async loadModelTasksByProject({commit}, projectId) {
       commit('setProcessing', true)
 
@@ -88,6 +62,7 @@ export default {
               text: data.text,
               status: data.status,
               date: dateField,
+              isCompleted: data.isCompleted,
               projectId: data.projectId
             }
 
@@ -124,6 +99,7 @@ export default {
             text: data.text,
             status: data.status,
             date: dateField,
+            isComplete: data.isComplete,
             projectId: data.projectId
           }
 
@@ -141,6 +117,7 @@ export default {
     async addTask({commit}, payload) {
       const origDate = payload.date
       const timestamp = new firebase.firestore.Timestamp.fromDate(new Date(payload.date))
+      payload.isCompleted = false
       payload.date = timestamp
 
       commit('setProcessing', true)
@@ -151,6 +128,7 @@ export default {
         payload.id = ref.id
         payload.date = origDate
         let taskModel = new TaskModel(payload)
+        taskModel.isComplete = false
 
         commit('addTask', taskModel)
         commit('setProcessing', false)
@@ -160,7 +138,6 @@ export default {
       }
     },
     async updateTask({commit}, task) {
-
       try {
         let taskRef = await db.collection('tasks').doc(task.id)
         let taskDoc = await taskRef.get()
@@ -173,6 +150,7 @@ export default {
             text: task.text,
             date: data.date,
             status: data.status,
+            isCompleted: data.isCompleted,
             projectId: data.projectId
           })
 
@@ -195,6 +173,9 @@ export default {
     },
     tasks(state) {
       return state.tasks
+    },
+    activeTasks(state) {
+      return state.tasks.filter(task => task.isCompleted == false)
     },
     // currentTasks(state) {
     //   return (projectId) => state.tasks[projectId]

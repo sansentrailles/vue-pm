@@ -54,14 +54,23 @@
               class="elevation-1"
             >
               <template v-slot:items="props">
-                <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td>
+                <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
                 <td>{{ props.item.title }}</td>
                 <td class="text-xs-right">{{ props.item.formattedDate }}</td>
                 <td>
                   <v-tooltip bottom>
                     <template v-slot:activator="{ on }">
+                      <v-btn flat icon color="grey" v-on="on" @click="completeTask(props.item)">
+                        <v-icon small>done</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>Завершить</span>
+                  </v-tooltip>
+
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
                       <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
-                        <v-icon>visibility</v-icon>
+                        <v-icon small>visibility</v-icon>
                       </v-btn>
                     </template>
                     <span>Посмотреть</span>
@@ -96,13 +105,13 @@ export default {
     loading: false,
     // tasks: [],
     headers: [
-      {
-        text: 'Статус',
-        align: 'left',
-        value: 'status',
-        width: 5,
-        sortabel: false
-      },
+      // {
+      //   text: 'Статус',
+      //   align: 'left',
+      //   value: 'status',
+      //   width: 1,
+      //   sortabel: false
+      // },
       {
         text: 'Задача',
         align: 'left',
@@ -120,17 +129,29 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadModelTasksByProject: 'task/loadModelTasksByProject'
+      loadModelTasksByProject: 'task/loadModelTasksByProject',
+      updateTask: 'task/updateTask'
     }),
     async fetchData() {
       this.projectId = this.$route.params.id
       await this.loadModelTasksByProject(this.projectId)
+    },
+    completeTask(taskModel) {
+      let task = {
+        title: taskModel.title,
+        text: taskModel.text,
+        date: taskModel.date,
+        status: taskModel.status,
+        projectId:taskModel.projectId,
+        isCompleted: true
+      }
+      this.updateTask(task)
     }
   },
   computed: {
     ...mapGetters({
       taskProcessing: 'task/isProcessing',
-      tasks: 'task/tasks'
+      tasks: 'task/activeTasks'
     }),
     currentProject () {
       return this.$store.getters.currentProject(this.projectId)
