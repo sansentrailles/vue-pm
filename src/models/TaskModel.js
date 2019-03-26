@@ -27,4 +27,11 @@ export default class {
   get statusObj() {
     return statuses.find(status => status.id == this.status)
   }
+
+  get timestamp() {
+    const date = new Date(this.date)
+    // eslint-disable-next-line no-console
+    // console.log(date)
+    return date.getTime()
+  }
 }

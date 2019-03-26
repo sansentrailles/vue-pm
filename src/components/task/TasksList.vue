@@ -1,0 +1,91 @@
+<template>
+  <v-card dark color="secondary">
+    <v-card-text class="pa-2">
+      <v-data-table
+        :disable-initial-sort="true"
+        :loading="taskProcessing"
+        :hide-actions="true"
+        no-data-text="Пока задач нет"
+        :headers="headers"
+        :items="tasks"
+        class="elevation-1"
+      >
+        <template v-slot:items="props">
+          <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
+          <td>{{ props.item.title }}</td>
+          <td class="text-xs-right">{{ props.item.formattedDate }}</td>
+          <td>
+            <!-- <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn flat icon color="grey" v-on="on" @click="completeTask(props.item)">
+                  <v-icon small>done</v-icon>
+                </v-btn>
+              </template>
+              <span>Завершить</span>
+            </v-tooltip> -->
+
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
+                  <v-icon small>visibility</v-icon>
+                </v-btn>
+              </template>
+              <span>Посмотреть</span>
+            </v-tooltip>
+          </td>
+        </template>
+      </v-data-table>
+    </v-card-text>
+  </v-card>
+</template>
+
+<script>
+import {mapGetters, mapActions} from 'vuex'
+export default {
+  props: ['tasks'],
+  data: () => ({
+    headers: [
+      // {
+      //   text: 'Статус',
+      //   align: 'left',
+      //   value: 'status',
+      //   width: 1,
+      //   sortabel: false
+      // },
+      {
+        text: 'Задача',
+        align: 'left',
+        value: 'title'
+      },
+      { text: 'Дата', value: 'date', align: 'right' },
+      { text: '', align: 'left', width: '50px', sortable: false }
+    ]
+  }),
+  methods: {
+    ...mapActions({
+      updateTask: 'task/updateTask'
+    }),
+    completeTask(taskModel) {
+      let task = {
+        id: taskModel.id,
+        title: taskModel.title,
+        text: taskModel.text,
+        date: taskModel.date,
+        status: taskModel.status,
+        projectId:taskModel.projectId,
+        isCompleted: true
+      }
+      this.updateTask(task)
+    }
+  },
+  computed: {
+    ...mapGetters({
+      taskProcessing: 'task/isProcessing'
+    })
+  }
+}
+</script>
+
+<style scoped>
+
+</style>

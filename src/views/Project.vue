@@ -43,43 +43,8 @@
       </v-flex>
 
       <v-flex xs7>
-        <v-card dark color="secondary">
-          <v-card-text class="pa-2">
-            <v-data-table
-              :loading="taskProcessing"
-              :hide-actions="true"
-              no-data-text="Пока задач нет"
-              :headers="headers"
-              :items="tasks"
-              class="elevation-1"
-            >
-              <template v-slot:items="props">
-                <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
-                <td>{{ props.item.title }}</td>
-                <td class="text-xs-right">{{ props.item.formattedDate }}</td>
-                <td>
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn flat icon color="grey" v-on="on" @click="completeTask(props.item)">
-                        <v-icon small>done</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Завершить</span>
-                  </v-tooltip>
+        <TasksList :tasks="tasks" />
 
-                  <v-tooltip bottom>
-                    <template v-slot:activator="{ on }">
-                      <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
-                        <v-icon small>visibility</v-icon>
-                      </v-btn>
-                    </template>
-                    <span>Посмотреть</span>
-                  </v-tooltip>
-                </td>
-              </template>
-            </v-data-table>
-          </v-card-text>
-        </v-card>
       </v-flex>
 
       <v-flex xs5>
@@ -96,30 +61,31 @@
 
 <script>
 import NewTaskDialog from '@/components/task/NewTaskDialog'
+import TasksList from '@/components/task/TasksList'
 import {mapActions, mapGetters} from 'vuex'
 
 export default {
-  components: {NewTaskDialog},
+  components: {NewTaskDialog, TasksList},
   data: () => ({
     projectId: null,
     loading: false,
     // tasks: [],
-    headers: [
-      // {
-      //   text: 'Статус',
-      //   align: 'left',
-      //   value: 'status',
-      //   width: 1,
-      //   sortabel: false
-      // },
-      {
-        text: 'Задача',
-        align: 'left',
-        value: 'title'
-      },
-      { text: 'Дата', value: 'date', align: 'right' },
-      { text: '', align: 'center', width: '10', sortable: false }
-    ],
+    // headers: [
+    //   // {
+    //   //   text: 'Статус',
+    //   //   align: 'left',
+    //   //   value: 'status',
+    //   //   width: 1,
+    //   //   sortabel: false
+    //   // },
+    //   {
+    //     text: 'Задача',
+    //     align: 'left',
+    //     value: 'title'
+    //   },
+    //   { text: 'Дата', value: 'date', align: 'right' },
+    //   { text: '', align: 'center', width: '10', sortable: false }
+    // ],
   }),
   created () {
     this.fetchData()
@@ -129,23 +95,11 @@ export default {
   },
   methods: {
     ...mapActions({
-      loadModelTasksByProject: 'task/loadModelTasksByProject',
-      updateTask: 'task/updateTask'
+      loadModelTasksByProject: 'task/loadModelTasksByProject'
     }),
     async fetchData() {
       this.projectId = this.$route.params.id
       await this.loadModelTasksByProject(this.projectId)
-    },
-    completeTask(taskModel) {
-      let task = {
-        title: taskModel.title,
-        text: taskModel.text,
-        date: taskModel.date,
-        status: taskModel.status,
-        projectId:taskModel.projectId,
-        isCompleted: true
-      }
-      this.updateTask(task)
     }
   },
   computed: {

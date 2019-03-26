@@ -67,6 +67,7 @@ export default {
             }
 
             const taskModel = new TaskModel(task)
+
             list.push(taskModel)
           })
 
@@ -143,6 +144,7 @@ export default {
         let taskDoc = await taskRef.get()
         if(taskDoc.exists) {
           taskRef.update(task)
+
           const data = taskDoc.data()
           let taskModel = new TaskModel({
             id: task.id,
@@ -150,7 +152,7 @@ export default {
             text: task.text,
             date: data.date,
             status: data.status,
-            isCompleted: data.isCompleted,
+            isCompleted: task.isCompleted,
             projectId: data.projectId
           })
 
@@ -175,7 +177,9 @@ export default {
       return state.tasks
     },
     activeTasks(state) {
-      return state.tasks.filter(task => task.isCompleted == false)
+      return state.tasks
+        .filter(task => task.isCompleted == false)
+        .sort((task1, task2) => task2.timestamp - task1.timestamp)
     },
     // currentTasks(state) {
     //   return (projectId) => state.tasks[projectId]
