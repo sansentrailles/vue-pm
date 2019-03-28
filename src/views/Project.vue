@@ -62,7 +62,7 @@
 <script>
 import NewTaskDialog from '@/components/task/NewTaskDialog'
 import TasksList from '@/components/task/TasksList'
-import {mapActions, mapGetters} from 'vuex'
+import {mapActions, mapGetters, mapMutations} from 'vuex'
 
 export default {
   components: {NewTaskDialog, TasksList},
@@ -87,7 +87,7 @@ export default {
     //   { text: '', align: 'center', width: '10', sortable: false }
     // ],
   }),
-  created () {
+  created() {
     this.fetchData()
   },
   watch: {
@@ -97,19 +97,21 @@ export default {
     ...mapActions({
       loadModelTasksByProject: 'task/loadModelTasksByProject'
     }),
+    ...mapMutations({
+      setCurrentProjectId: 'projects/setCurrentProjectId'
+    }),
     async fetchData() {
       this.projectId = this.$route.params.id
+      this.setCurrentProjectId(this.projectId)
       await this.loadModelTasksByProject(this.projectId)
     }
   },
   computed: {
     ...mapGetters({
       taskProcessing: 'task/isProcessing',
-      tasks: 'task/activeTasks'
-    }),
-    currentProject () {
-      return this.$store.getters.currentProject(this.projectId)
-    }
+      tasks: 'task/activeTasks',
+      currentProject: 'projects/currentProject'
+    })
   }
 }
 </script>

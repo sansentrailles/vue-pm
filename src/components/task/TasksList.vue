@@ -13,8 +13,15 @@
         <template v-slot:items="props">
           <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
           <td>{{ props.item.title }}</td>
-          <td class="text-xs-right">{{ props.item.formattedDate }}</td>
+          <td class="text-xs-center">{{ props.item.formattedDate }}</td>
           <td>
+            <v-btn flat icon color="grey" @click="completeTask(props.item)">
+              <v-icon small>done</v-icon>
+            </v-btn>
+
+            <v-btn flat icon color="grey" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
+              <v-icon small>visibility</v-icon>
+            </v-btn>
             <!-- <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn flat icon color="grey" v-on="on" @click="completeTask(props.item)">
@@ -24,14 +31,14 @@
               <span>Завершить</span>
             </v-tooltip> -->
 
-            <v-tooltip bottom>
+            <!-- <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
                   <v-icon small>visibility</v-icon>
                 </v-btn>
               </template>
               <span>Посмотреть</span>
-            </v-tooltip>
+            </v-tooltip> -->
           </td>
         </template>
       </v-data-table>
@@ -57,8 +64,8 @@ export default {
         align: 'left',
         value: 'title'
       },
-      { text: 'Дата', value: 'date', align: 'right' },
-      { text: '', align: 'left', width: '50px', sortable: false }
+      { text: 'Дата', value: 'date', align: 'center' },
+      { text: '', align: 'left', width: '20%', sortable: false }
     ]
   }),
   methods: {

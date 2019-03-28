@@ -17,7 +17,7 @@ export default class {
 
     const options = {
       year: 'numeric',
-      month: 'short',
+      month: 'numeric',
       day: 'numeric'
     };
 

@@ -10,16 +10,13 @@ const db = fb.firestore()
 export default {
   namespaced: true,
   state: {
-    currentProjectId: null,
+    // currentProjectId: null,
     tasks: [],
     // tasks: {},
     statuses,
     processing: false,
   },
   mutations: {
-    setCurrentProjectId(state, projectId) {
-      state.currentProjectId = projectId
-    },
     setTasks(state, payload) {
       return state.tasks = payload
     },
@@ -71,7 +68,7 @@ export default {
             list.push(taskModel)
           })
 
-          commit('setCurrentProjectId', projectId)
+          // commit('setCurrentProjectId', projectId)
           commit('setTasks', list)
           commit('setProcessing', false)
       } catch(error) {
@@ -181,14 +178,6 @@ export default {
         .filter(task => task.isCompleted == false)
         .sort((task1, task2) => task2.timestamp - task1.timestamp)
     },
-    // currentTasks(state) {
-    //   return (projectId) => state.tasks[projectId]
-    // },
-    // taskById(state) {
-    //   return (projectId, taskId) => {
-    //     return state.tasks[projectId].find(task => task.id == taskId)
-    //   }
-    // },
     isProcessing(state) {
       return state.processing
     }

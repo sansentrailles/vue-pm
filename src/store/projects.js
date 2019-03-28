@@ -2,14 +2,19 @@ import fb from '@/services/firebase'
 const db = fb.firestore()
 
 export default {
+  namespaced: true,
   state: {
+    currentProjectId: null,
     projects: []
   },
   mutations: {
+    setCurrentProjectId(state, projectId) {
+      state.currentProjectId = projectId
+    },
     setProjects(state, payload) {
       state.projects = payload
     },
-    setProject(state, payload) {
+    addProject(state, payload) {
       // Vue.set(state.projects, payload.id, payload)
       state.projects.push(payload)
     }
@@ -34,21 +39,24 @@ export default {
         commit('setError', error.message)
       }
     },
-    createProject({commit}, payload) {
+    async createProject({commit}, payload) {
       const project = {
         name: payload.name
       }
 
-      db.collection('projects').add(project).then(ref => {
-        project.id = ref.id
-        commit('setProject', project);
-      });
+      const ref = await db.collection('projects').add(project)
+      project.id = ref.id
+      commit('addProject', project)
+      // .then(ref => {
+      //   project.id = ref.id
+      //   commit('setProject', project);
+      // });
     },
   },
   getters: {
     projects(state) {
       return state.projects
     },
-    currentProject: (state) => (projectId) => state.projects.find(project => project.id === projectId)
+    currentProject: (state) => state.projects.find(project => project.id === state.currentProjectId)
   }
 }

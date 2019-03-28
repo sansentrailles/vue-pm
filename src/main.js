@@ -23,15 +23,21 @@ Vue.config.productionTip = false
 //   messagingSenderId: "152804312983"
 // };
 // fb.initializeApp(config);
-
+import {mapActions} from 'vuex'
 let app = ''
 fb.auth().onAuthStateChanged(() => {
   if (!app) {
     app = new Vue({
       router,
       store,
+      methods: {
+        ...mapActions({
+          'loadProjects' : 'projects/loadProjects'
+        }),
+      },
       created() {
-          this.$store.dispatch('loadProjects')
+        this.loadProjects()
+          // this.$store.dispatch('loadProjects')
       },
       render: h => h(App)
     }).$mount('#app')
