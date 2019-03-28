@@ -48,7 +48,7 @@
       </v-flex>
 
       <v-flex xs5>
-        <v-card dark color="secondary">
+        <v-card dark color="secondary" v-show="isShowEditor">
           <v-card-text class="pa-2">
             <router-view/>
           </v-card-text>
@@ -69,23 +69,6 @@ export default {
   data: () => ({
     projectId: null,
     loading: false,
-    // tasks: [],
-    // headers: [
-    //   // {
-    //   //   text: 'Статус',
-    //   //   align: 'left',
-    //   //   value: 'status',
-    //   //   width: 1,
-    //   //   sortabel: false
-    //   // },
-    //   {
-    //     text: 'Задача',
-    //     align: 'left',
-    //     value: 'title'
-    //   },
-    //   { text: 'Дата', value: 'date', align: 'right' },
-    //   { text: '', align: 'center', width: '10', sortable: false }
-    // ],
   }),
   created() {
     this.fetchData()
@@ -110,8 +93,11 @@ export default {
     ...mapGetters({
       taskProcessing: 'task/isProcessing',
       tasks: 'task/activeTasks',
-      currentProject: 'projects/currentProject'
-    })
+      currentProject: 'projects/currentProject',
+    }),
+    isShowEditor() {
+      return !!this.$route.params.taskId
+    }
   }
 }
 </script>
