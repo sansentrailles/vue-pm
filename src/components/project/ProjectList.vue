@@ -24,22 +24,7 @@
             </v-list-tile>
           </v-list>
 
-
           <NewProjectDialog :dialog="dialog" />
-          <!-- <v-dialog v-model="dialog" max-width="500px">
-            <v-card>
-              <v-card-title>
-                Новый проект
-              </v-card-title>
-              <v-card-text>
-                <v-text-field label="Название проекта"></v-text-field>
-              </v-card-text>
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn flat color="primary" @click="dialog = false">Сохранить</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog> -->
 
         </v-card>
       </v-flex>

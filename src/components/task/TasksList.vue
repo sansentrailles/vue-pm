@@ -12,9 +12,9 @@
       >
         <template v-slot:items="props">
           <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
-          <td>{{ props.item.title }}</td>
-          <td class="text-xs-center">{{ props.item.formattedDate }}</td>
-          <td>
+          <td class="px-2 py-0">{{ props.item.title }}</td>
+          <td class="text-xs-center px-0 py-0">{{ props.item.formattedDate }}</td>
+          <td class="px-0">
             <v-btn flat icon color="grey" @click="completeTask(props.item)">
               <v-icon small>done</v-icon>
             </v-btn>
@@ -65,7 +65,7 @@ export default {
         value: 'title'
       },
       { text: 'Дата', value: 'date', align: 'center' },
-      { text: '', align: 'left', width: '20%', sortable: false }
+      { text: '', align: 'left', width: '120px', sortable: false }
     ]
   }),
   methods: {
