@@ -10,7 +10,8 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" flat @click="closeForm">Закрыть</v-btn>
-        <v-btn flat color="primary" @click="addProject">Сохранить</v-btn>
+        <v-btn flat color="primary" @click="addProject">Добавить</v-btn>
+
       </v-card-actions>
     </v-card>
   </v-dialog>
