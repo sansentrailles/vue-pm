@@ -32,6 +32,11 @@ export default {
     updateTask(state, taskModel) {
       const index = state.tasks.findIndex(item => item.id == taskModel.id)
 
+      // eslint-disable-next-line no-console
+      console.log('index', index)
+      // eslint-disable-next-line no-console
+      console.log('index', taskModel)
+
       if(index !== -1) {
         state.tasks.splice(index, 1, taskModel)
       }
@@ -143,13 +148,16 @@ export default {
           taskRef.update(task)
 
           const data = taskDoc.data()
+          // eslint-disable-next-line no-console
+          // console.log(data.date, data.formattedDate)
+          const isCompleted = task.isCompleted ? task.isCompleted : data.isCompleted
           let taskModel = new TaskModel({
             id: task.id,
             title: task.title,
             text: task.text,
-            date: data.date,
+            date: data.date.timestamp,
             status: data.status,
-            isCompleted: task.isCompleted,
+            isCompleted: isCompleted,
             projectId: data.projectId
           })
 
