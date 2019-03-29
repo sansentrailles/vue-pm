@@ -32,6 +32,8 @@ export default {
         name: this.projectName
       }
       this.createProject(project)
+      this.projectName = ''
+      this.dialog = false
     },
     closeForm() {
       this.dialog = false

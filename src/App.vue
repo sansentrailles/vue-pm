@@ -36,9 +36,3 @@ export default {
   }),
 }
 </script>
-
-<style scoped>
-.new-project-form {
-  padding: 10px;
-}
-</style>

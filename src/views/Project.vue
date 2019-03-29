@@ -44,7 +44,6 @@
 
       <v-flex xs7>
         <TasksList :tasks="tasks" />
-
       </v-flex>
 
       <v-flex xs5>
