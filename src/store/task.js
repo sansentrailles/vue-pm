@@ -2,6 +2,7 @@ import Vue from 'vue'
 import fb from '@/services/firebase'
 import TaskModel from '@/models/TaskModel'
 import {statuses, statusConst} from './statuses'
+import DateTimeHelper from '@/helpers/DateTimeHelper'
 
 import firebase from 'firebase'
 
@@ -130,6 +131,8 @@ export default {
 
         payload.id = ref.id
         payload.date = origDate
+        // eslint-disable-next-line no-console
+        console.log(payload)
         let taskModel = new TaskModel(payload)
         taskModel.isComplete = false
 
@@ -155,7 +158,7 @@ export default {
             id: task.id,
             title: task.title,
             text: task.text,
-            date: data.date.timestamp,
+            date: DateTimeHelper.timestampToRawDate(data.date.seconds),
             status: data.status,
             isCompleted: isCompleted,
             projectId: data.projectId
