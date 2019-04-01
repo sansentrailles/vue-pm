@@ -11,35 +11,20 @@
         class="elevation-1"
       >
         <template v-slot:items="props">
-          <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
-          <td class="px-2 py-0">{{ props.item.title }}</td>
-          <td class="text-xs-center px-0 py-0">{{ props.item.formattedDate }}</td>
-          <td class="px-0">
-            <v-btn flat icon color="grey" @click="completeTask(props.item)">
-              <v-icon small>done</v-icon>
-            </v-btn>
+          <tr @click="showTask(props.item.id)">
+            <!-- <td><v-icon>{{ props.item.statusObj.icon }}</v-icon></td> -->
+            <td class="px-2 py-0">{{ props.item.title }}</td>
+            <td class="text-xs-center px-0 py-0">{{ props.item.formattedDate }}</td>
+            <td class="px-0">
+              <v-btn flat icon color="grey" @click="completeTask(props.item)">
+                <v-icon small>done</v-icon>
+              </v-btn>
 
-            <v-btn flat icon color="grey" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
-              <v-icon small>visibility</v-icon>
-            </v-btn>
-            <!-- <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn flat icon color="grey" v-on="on" @click="completeTask(props.item)">
-                  <v-icon small>done</v-icon>
-                </v-btn>
-              </template>
-              <span>Завершить</span>
-            </v-tooltip> -->
-
-            <!-- <v-tooltip bottom>
-              <template v-slot:activator="{ on }">
-                <v-btn flat icon color="grey" v-on="on" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
-                  <v-icon small>visibility</v-icon>
-                </v-btn>
-              </template>
-              <span>Посмотреть</span>
-            </v-tooltip> -->
-          </td>
+              <!-- <v-btn flat icon color="grey" :to="{name: 'taskEdit', params: {taskId: props.item.id}}">
+                <v-icon small>visibility</v-icon>
+              </v-btn> -->
+            </td>
+          </tr>
         </template>
       </v-data-table>
     </v-card-text>
@@ -72,6 +57,9 @@ export default {
     ...mapActions({
       updateTask: 'task/updateTask'
     }),
+    showTask(taskId) {
+      this.$router.push({name: 'taskEdit', params: {taskId: taskId}})
+    },
     completeTask(taskModel) {
       let task = {
         id: taskModel.id,

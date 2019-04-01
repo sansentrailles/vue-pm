@@ -47,11 +47,17 @@
       </v-flex>
 
       <v-flex xs5>
-        <v-card dark color="secondary" v-show="isShowEditor">
-          <v-card-text class="pa-2">
-            <router-view/>
-          </v-card-text>
-        </v-card>
+        <transition
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
+          mode="out-in"
+        >
+          <v-card dark color="secondary" v-show="isShowEditor">
+            <v-card-text class="pa-2">
+              <router-view/>
+            </v-card-text>
+          </v-card>
+        </transition>
       </v-flex>
 
     </v-layout>
