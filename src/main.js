@@ -15,21 +15,14 @@ Vue.use(Vuetify)
 
 Vue.config.productionTip = false
 
-import {mapActions} from 'vuex'
 let app = ''
 fb.auth().onAuthStateChanged(() => {
   if (!app) {
     app = new Vue({
       router,
       store,
-      methods: {
-        ...mapActions({
-          'loadProjects' : 'projects/loadProjects'
-        }),
-      },
       created() {
-        this.loadProjects()
-          // this.$store.dispatch('loadProjects')
+          this.$store.dispatch('projects/loadProjects')
       },
       render: h => h(App)
     }).$mount('#app')

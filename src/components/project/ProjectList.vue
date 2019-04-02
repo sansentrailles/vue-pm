@@ -37,12 +37,6 @@
         </v-list-tile-content>
       </v-list-tile>
 
-      <v-list-tile :to="'/dev/'">
-        <v-list-tile-content>
-          <v-list-tile-title class="title">DEV</v-list-tile-title>
-        </v-list-tile-content>
-      </v-list-tile>
-
     </v-list>
   </div>
 </template>

@@ -24,7 +24,7 @@
                 label="Задача*"
                 :loading="false"
                 hint="Краткое описание задачи"
-                  required
+                required
               ></v-text-field>
             </v-flex>
 
